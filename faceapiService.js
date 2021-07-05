@@ -17,7 +17,7 @@ async function image(file) {
 }
 
 async function detect(tensor) {
-  const result = await faceapi.detectAllFaces(tensor, optionsSSDMobileNet);
+  const result = await faceapi.detectAllFaces(tensor, optionsSSDMobileNet).withFaceExpressions().withAgeAndGender();
   return result;
 }
 
@@ -29,15 +29,11 @@ async function main(file) {
   await faceapi.tf.ENV.set("DEBUG", false);
   await faceapi.tf.ready();
 
-  console.log(
-    `Version: TensorFlow/JS ${faceapi.tf?.version_core} FaceAPI ${
-      faceapi.version.faceapi
-    } Backend: ${faceapi.tf?.getBackend()}`
-  );
-
   console.log("Loading FaceAPI models");
   const modelPath = path.join(__dirname, modelPathRoot);
   await faceapi.nets.ssdMobilenetv1.loadFromDisk(modelPath);
+  await faceapi.nets.faceExpressionNet.loadFromDisk(modelPath);
+  await faceapi.nets.ageGenderNet.loadFromDisk(modelPath);
   optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
     minConfidence: 0.5,
   });
