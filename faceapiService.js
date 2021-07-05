@@ -17,7 +17,7 @@ async function image(file) {
 }
 
 async function detect(tensor) {
-  const result = await faceapi.detectAllFaces(tensor, optionsSSDMobileNet).withFaceExpressions();
+  const result = await faceapi.detectAllFaces(tensor, optionsSSDMobileNet);
   return result;
 }
 
